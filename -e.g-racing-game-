@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Racing Game</title>
+    <style>
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background: #000;
+        }
+        #score {
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="500" height="700"></canvas>
+    <div id="score">Score: 0</div>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const carWidth = 50;
+        const carHeight = 100;
+        const roadWidth = 400;
+        let carX = canvas.width / 2 - carWidth / 2;
+        let carY = canvas.height - carHeight - 10;
+        let score = 0;
+
+        function drawRoad() {
+            ctx.fillStyle = 'gray';
+            ctx.fillRect((canvas.width - roadWidth) / 2, 0, roadWidth, canvas.height);
+            ctx.fillStyle = 'white';
+            ctx.fillRect((canvas.width - roadWidth) / 2 - 10, 0, 10, canvas.height);
+            ctx.fillRect((canvas.width + roadWidth) / 2, 0, 10, canvas.height);
+        }
+
+        function drawCar() {
+            ctx.fillStyle = 'red';
+            ctx.fillRect(carX, carY, carWidth, carHeight);
+        }
+
+        function drawScore() {
+            document.getElementById('score').innerText = `Score: ${score}`;
+        }
+
+        function moveCar(event) {
+            const key = event.key;
+            if (key === 'ArrowLeft' && carX > (canvas.width - roadWidth) / 2) {
+                carX -= 10;
+            } else if (key === 'ArrowRight' && carX < (canvas.width + roadWidth) / 2 - carWidth) {
+                carX += 10;
+            }
+        }
+
+        function update() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawRoad();
+            drawCar();
+            drawScore();
+            score++;
+            requestAnimationFrame(update);
+        }
+
+        document.addEventListener('keydown', moveCar);
+        update();
+    </script>
+</body>
+</html>
